@@ -60,8 +60,6 @@ SecureBank-2FA-Project/
 │   ├── login-screen.png      # Application screenshots  
 │   ├── 2fa-verification.png
 │   └── admin-dashboard.png
-├── assets/
-│   └── project-presentation.pdf
 └── tests/
     └── security-test-cases.md
 ```
