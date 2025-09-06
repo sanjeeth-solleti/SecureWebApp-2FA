@@ -394,6 +394,6 @@ const FEATURE_FLAGS = {
 
 ---
 
-**Ready to impress TCS with your secure development expertise!** 🚀
+**Ready to impress with your secure development expertise!** 🚀
 
 *This setup guide ensures you're fully prepared to demonstrate advanced web security knowledge and practical development skills.*
