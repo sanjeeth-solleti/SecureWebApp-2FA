@@ -128,7 +128,7 @@ See `tests/security-test-cases.md` for comprehensive test scenarios.
 - Security features showcase
 - Role-based content display
 
-## 🏆 Why This Project Stands Out for TCS
+## 🏆 Why This Project Stands Out 
 
 ### 1. **Real-World Banking Security**
 - Implements actual security practices used in financial applications
