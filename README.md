@@ -214,8 +214,5 @@ See `tests/security-test-cases.md` for comprehensive test scenarios.
 **Email:** [your.email@example.com]  
 **LinkedIn:** [linkedin.com/in/yourprofile]  
 **GitHub:** [github.com/yourusername]
-
----
-
-**Built with ❤️ for TCS Technical Interview**  
+ 
 *Demonstrating secure web development expertise*
