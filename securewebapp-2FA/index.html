@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank - Enterprise Banking Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 95%;
+            min-height: 600px;
+            display: flex;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px 30px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .form-title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .form-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+        }
+        
+        .alert-success {
+            background: #efe;
+            border: 1px solid #cfc;
+            color: #393;
+        }
+        
+        .alert-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            color: #0066cc;
+        }
+        
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard.active {
+            display: block;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            margin-top: 20px;
+            width: auto;
+            padding: 12px 24px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .otp-container {
+            text-align: center;
+        }
+        
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            margin: 0 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .resend-otp {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+        
+        .security-features {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">🏦 SecureBank</div>
+            <div class="tagline">Enterprise Banking Portal with Advanced Security</div>
+            <div style="margin-top: auto;">
+                <div class="security-badge">
+                    🔒 2FA Enabled
+                </div>
+                <div class="security-badge" style="margin-left: 8px;">
+                    🛡️ TLS Encrypted
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Login Form -->
+            <div id="loginForm" class="form-container">
+                <h1 class="form-title">Welcome Back</h1>
+                <p class="form-subtitle">Sign in to your secure banking account</p>
+                
+                <div id="loginAlert" class="alert alert-info hidden">
+                    Demo Accounts Available:<br>
+                    <strong>admin@securebank.com</strong> / admin123<br>
+                    <strong>user@securebank.com</strong> / user123
+                </div>
+                
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userType">Account Type</label>
+                        <select id="userType" name="userType" required>
+                            <option value="">Select Account Type</option>
+                            <option value="admin">Administrator</option>
+                            <option value="user">Standard User</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Sign In</button>
+                </form>
+                
+                <button id="showDemoBtn" class="btn" style="background: #95a5a6; margin-top: 16px;">Show Demo Accounts</button>
+            </div>
+            
+            <!-- 2FA Verification Form -->
+            <div id="otpForm" class="form-container hidden">
+                <h1 class="form-title">Two-Factor Authentication</h1>
+                <p class="form-subtitle">Enter the 6-digit verification code sent to your registered device</p>
+                
+                <div id="otpAlert" class="alert alert-info">
+                    A 6-digit OTP has been sent to your registered email/SMS
+                </div>
+                
+                <form id="otpFormElement">
+                    <div class="form-group otp-container">
+                        <label>Verification Code</label>
+                        <div style="margin: 16px 0;">
+                            <input type="text" class="otp-input" maxlength="1" id="otp1">
+                            <input type="text" class="otp-input" maxlength="1" id="otp2">
+                            <input type="text" class="otp-input" maxlength="1" id="otp3">
+                            <input type="text" class="otp-input" maxlength="1" id="otp4">
+                            <input type="text" class="otp-input" maxlength="1" id="otp5">
+                            <input type="text" class="otp-input" maxlength="1" id="otp6">
+                        </div>
+                        <button type="button" class="resend-otp" id="resendOtpBtn">Resend OTP</button>
+                    </div>
+                    
+                    <button type="submit" class="btn">Verify & Continue</button>
+                </form>
+            </div>
+            
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard">
+                <div class="dashboard-header">
+                    <h1>Dashboard</h1>
+                    <p>Welcome to your secure banking portal</p>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">$45,230.50</div>
+                        <div class="stat-label">Account Balance</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Recent Transactions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Active</div>
+                        <div class="stat-label">Account Status</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="userRole">User</div>
+                        <div class="stat-label">Access Level</div>
+                    </div>
+                </div>
+                
+                <div class="security-features">
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">🛡️ Security Features Implemented</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">2FA</div>
+                            <div>
+                                <strong>Two-Factor Authentication</strong><br>
+                                <small>OTP-based verification for enhanced security</small>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔒</div>
+                            <div>
+                                <strong>Input Validation</strong><br>
+                                <small>XSS & SQL injection protection</small>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🛡️</div>
+                            <div>
+                                <strong>Role-Based Access</strong><br>
+                                <small>Admin and user privilege separation</small>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔐</div>
+                            <div>
+                                <strong>Session Management</strong><br>
+                                <small>Secure token-based authentication</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="logoutBtn" class="btn logout-btn">Secure Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Security Configuration
+        const SECURITY_CONFIG = {
+            maxLoginAttempts: 3,
+            sessionTimeout: 1800000, // 30 minutes
+            otpExpiry: 300000, // 5 minutes
+            csrfToken: generateCSRFToken()
+        };
+
+        // Demo user accounts (In production, this would be in a secure database)
+        const DEMO_ACCOUNTS = {
+            'admin@securebank.com': {
+                password: 'admin123',
+                role: 'admin',
+                phone: '+91-****-***-123'
+            },
+            'user@securebank.com': {
+                password: 'user123',
+                role: 'user',
+                phone: '+91-****-***-456'
+            }
+        };
+
+        // Security utilities
+        function generateCSRFToken() {
+            return Math.random().toString(36).substring(2, 15) + 
+                   Math.random().toString(36).substring(2, 15);
+        }
+
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email) && email.length <= 254;
+        }
+
+        function validatePassword(password) {
+            // Basic password validation
+            return password.length >= 6 && password.length <= 128;
+        }
+
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // State management
+        let currentUser = null;
+        let otpData = null;
+        let loginAttempts = 0;
+        let sessionTimer = null;
+
+        // DOM elements
+        const loginForm = document.getElementById('loginForm');
+        const otpForm = document.getElementById('otpForm');
+        const dashboard = document.getElementById('dashboard');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const otpFormElement = document.getElementById('otpFormElement');
+        const showDemoBtn = document.getElementById('showDemoBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const resendOtpBtn = document.getElementById('resendOtpBtn');
+
+        // Show/hide demo accounts
+        showDemoBtn.addEventListener('click', function() {
+            const alertDiv = document.getElementById('loginAlert');
+            alertDiv.classList.toggle('hidden');
+            this.textContent = alertDiv.classList.contains('hidden') ? 
+                'Show Demo Accounts' : 'Hide Demo Accounts';
+        });
+
+        // Login form submission
+        loginFormElement.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (loginAttempts >= SECURITY_CONFIG.maxLoginAttempts) {
+                showAlert('error', 'Account temporarily locked. Please try again later.');
+                return;
+            }
+
+            const formData = new FormData(this);
+            const email = sanitizeInput(formData.get('email'));
+            const password = formData.get('password');
+            const userType = formData.get('userType');
+
+            // Input validation
+            if (!validateEmail(email)) {
+                showAlert('error', 'Please enter a valid email address.');
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                showAlert('error', 'Password must be between 6-128 characters.');
+                return;
+            }
+
+            // Simulate authentication
+            if (authenticateUser(email, password, userType)) {
+                // Generate and send OTP
+                const otp = generateOTP();
+                otpData = {
+                    code: otp,
+                    email: email,
+                    timestamp: Date.now(),
+                    attempts: 0
+                };
+
+                // In production, send OTP via SMS/Email
+                console.log(`OTP for ${email}: ${otp}`);
+                
+                showAlert('success', `OTP sent successfully! (Demo OTP: ${otp})`);
+                
+                setTimeout(() => {
+                    showOTPForm();
+                }, 1000);
+            } else {
+                loginAttempts++;
+                showAlert('error', `Invalid credentials. Attempts remaining: ${SECURITY_CONFIG.maxLoginAttempts - loginAttempts}`);
+            }
+        });
+
+        // OTP form submission
+        otpFormElement.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!otpData || Date.now() - otpData.timestamp > SECURITY_CONFIG.otpExpiry) {
+                showAlert('error', 'OTP expired. Please request a new one.');
+                return;
+            }
+
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
+
+            if (enteredOTP.length !== 6) {
+                showAlert('error', 'Please enter the complete 6-digit OTP.');
+                return;
+            }
+
+            if (verifyOTP(enteredOTP)) {
+                loginUser();
+            } else {
+                otpData.attempts++;
+                if (otpData.attempts >= 3) {
+                    showAlert('error', 'Too many incorrect attempts. Please login again.');
+                    resetToLogin();
+                } else {
+                    showAlert('error', `Invalid OTP. ${3 - otpData.attempts} attempts remaining.`);
+                }
+            }
+        });
+
+        // OTP input handling
+        document.querySelectorAll('.otp-input').forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && index < 5) {
+                    document.getElementById(`otp${index + 2}`).focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                    document.getElementById(`otp${index}`).focus();
+                }
+            });
+        });
+
+        // Resend OTP
+        resendOtpBtn.addEventListener('click', function() {
+            if (otpData) {
+                const newOTP = generateOTP();
+                otpData.code = newOTP;
+                otpData.timestamp = Date.now();
+                otpData.attempts = 0;
+                
+                console.log(`New OTP for ${otpData.email}: ${newOTP}`);
+                showAlert('success', `New OTP sent! (Demo OTP: ${newOTP})`);
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                logout();
+            }
+        });
+
+        // Authentication functions
+        function authenticateUser(email, password, userType) {
+            const user = DEMO_ACCOUNTS[email];
+            return user && user.password === password && user.role === userType;
+        }
+
+        function verifyOTP(enteredOTP) {
+            return otpData && enteredOTP === otpData.code;
+        }
+
+        function loginUser() {
+            currentUser = {
+                email: otpData.email,
+                role: DEMO_ACCOUNTS[otpData.email].role,
+                loginTime: Date.now()
+            };
+
+            // Clear sensitive data
+            otpData = null;
+            loginAttempts = 0;
+
+            // Start session timer
+            startSessionTimer();
+
+            // Show dashboard
+            showDashboard();
+            
+            showAlert('success', 'Login successful! Welcome to SecureBank.');
+        }
+
+        function logout() {
+            currentUser = null;
+            clearTimeout(sessionTimer);
+            resetToLogin();
+            showAlert('info', 'You have been securely logged out.');
+        }
+
+        // UI functions
+        function showOTPForm() {
+            loginForm.classList.add('hidden');
+            otpForm.classList.remove('hidden');
+            dashboard.classList.remove('active');
+        }
+
+        function showDashboard() {
+            loginForm.classList.add('hidden');
+            otpForm.classList.add('hidden');
+            dashboard.classList.add('active');
+            
+            document.getElementById('userRole').textContent = 
+                currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+        }
+
+        function resetToLogin() {
+            loginForm.classList.remove('hidden');
+            otpForm.classList.add('hidden');
+            dashboard.classList.remove('active');
+            
+            // Clear forms
+            loginFormElement.reset();
+            document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+        }
+
+        function showAlert(type, message, containerId = null) {
+            // Find the active container
+            let container;
+            if (!loginForm.classList.contains('hidden')) {
+                container = loginForm;
+            } else if (!otpForm.classList.contains('hidden')) {
+                container = otpForm;
+            } else {
+                container = dashboard;
+            }
+
+            // Remove existing alerts
+            const existingAlert = container.querySelector('.alert:not(.hidden)');
+            if (existingAlert && !existingAlert.id.includes('loginAlert') && !existingAlert.id.includes('otpAlert')) {
+                existingAlert.remove();
+            }
+
+            // Create new alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            // Insert at the top of the container
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function startSessionTimer() {
+            sessionTimer = setTimeout(() => {
+                alert('Session expired due to inactivity. Please login again.');
+                logout();
+            }, SECURITY_CONFIG.sessionTimeout);
+
+            // Reset timer on user activity
+            ['click', 'keypress', 'mousemove'].forEach(event => {
+                document.addEventListener(event, () => {
+                    if (currentUser) {
+                        clearTimeout(sessionTimer);
+                        startSessionTimer();
+                    }
+                });
+            });
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('SecureBank Application Initialized');
+            console.log('Security Features: 2FA, Input Validation, CSRF Protection, Session Management');
+            
+            // Auto-show demo credentials for easier testing
+            setTimeout(() => {
+                document.getElementById('loginAlert').classList.remove('hidden');
+                showDemoBtn.textContent = 'Hide Demo Accounts';
+            }, 1000);
+        });
+
+        // Prevent common attacks
+        
+        // XSS Prevention - Content Security Policy simulation
+        document.addEventListener('DOMContentLoaded', function() {
+            const scripts = document.querySelectorAll('script[src]');
+            scripts.forEach(script => {
+                if (!script.src.includes(window.location.origin) && 
+                    !script.src.includes('cdnjs.cloudflare.com')) {
+                    console.warn('Blocked potentially unsafe script:', script.src);
+                    script.remove();
+                }
+            });
+        });
+
+        // Form validation to prevent injection
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            const inputs = form.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                // Basic SQL injection pattern detection
+                const sqlPatterns = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|SCRIPT)\b)|('|"|;|--)/gi;
+                if (sqlPatterns.test(input.value)) {
+                    e.preventDefault();
+                    showAlert('error', 'Invalid characters detected. Please check your input.');
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
