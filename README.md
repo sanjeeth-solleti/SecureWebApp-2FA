@@ -5,7 +5,7 @@ A comprehensive secure banking portal demonstrating enterprise-level security pr
 ## 🎯 Project Overview
 
 **Focus:** Secure Web Development + Security Knowledge  
-**Tech Stack:** HTML5, CSS3, Vanilla JavaScript, Security Best Practices
+**Tech Stack:** HTML5, CSS3, JavaScript, Security Best Practices
 
 ## ✨ Key Features
 
